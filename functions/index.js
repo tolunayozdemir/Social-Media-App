@@ -20,7 +20,6 @@ const {
   getAuthenticatedUser
 } = require("./handlers/users");
 
-
 //Scream Routes
 app.get("/screams", getAllScreams);
 app.post("/createScream", FBAuth, postScream);
