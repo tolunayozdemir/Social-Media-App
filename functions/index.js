@@ -33,13 +33,9 @@ app.post("/scream/:screamId/comment", FBAuth, commentOnScream);
 //User Routes
 //Signup
 app.post("/signup", signup);
-//login
 app.post("/login", login);
-//upload image
 app.post("/user/image", FBAuth, uploadImage);
-//add user detail
 app.post("/user", FBAuth, addUserDetail);
-//like
 app.get("/user", FBAuth, getAuthenticatedUser);
 
 exports.createNotificationOnLike = functions
