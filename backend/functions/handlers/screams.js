@@ -11,7 +11,10 @@ exports.getAllScreams = (req, res) => {
           screamId: doc.id,
           body: doc.data().body,
           userHandler: doc.data().userHandler,
-          createdAt: doc.data().createdAt
+          createdAt: doc.data().createdAt,
+          commentCount: doc.data().commentCount,
+          likeCount: doc.data().likeCount,
+          userImage: doc.data().userImage
         });
       });
 
@@ -82,7 +85,7 @@ exports.getScream = (req, res) => {
 
 exports.commentOnScream = (req, res) => {
   if (req.body.body.trim() === "")
-    return res.status(400).json({ error: "Comment must be empty" });
+    return res.status(400).json({ comment: "Comment must be empty" });
 
   const newComment = {
     body: req.body.body,
@@ -215,20 +218,20 @@ exports.deleteScream = (req, res) => {
   const document = db.doc(`/screams/${req.params.screamId}`);
   document
     .get()
-    .then((doc) => {
+    .then(doc => {
       if (!doc.exists) {
-        return res.status(404).json({ error: 'Scream not found' });
+        return res.status(404).json({ error: "Scream not found" });
       }
       if (doc.data().userHandle !== req.user.handle) {
-        return res.status(403).json({ error: 'Unauthorized' });
+        return res.status(403).json({ error: "Unauthorized" });
       } else {
         return document.delete();
       }
     })
     .then(() => {
-      res.json({ message: 'Scream deleted successfully' });
+      res.json({ message: "Scream deleted successfully" });
     })
-    .catch((err) => {
+    .catch(err => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     });
