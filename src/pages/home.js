@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-
 import Scream from "../components/Scream";
+import Profile from "../components/Profile";
 
 const CancelToken = axios.CancelToken;
 
@@ -26,8 +26,7 @@ class home extends Component {
           this.setState({
             screams: res.data
           });
-        }
-        else console.log("Trying to call setState")
+        } else console.log("Trying to call setState");
       })
       .catch(err => console.log(err));
   }
@@ -51,7 +50,7 @@ class home extends Component {
           {recentScreamsMarkup}
         </Grid>
         <Grid item sm={4} xs={12}>
-          <p>Profile</p>
+          <Profile />
         </Grid>
       </Grid>
     );
