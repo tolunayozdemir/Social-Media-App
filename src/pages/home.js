@@ -1,44 +1,24 @@
 import React, { Component } from "react";
-import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Scream from "../components/Scream";
 import Profile from "../components/Profile";
+import PropTypes from "prop-types";
+//Redux
+import { connect } from "react-redux";
+import { getScreams } from "../redux/actions/dataActions";
 
-const CancelToken = axios.CancelToken;
 
 class home extends Component {
-  state = {
-    screams: null
-  };
-  requestSource = null;
-  mounted = false;
-
   componentDidMount() {
-    this.mounted = true;
-
-    this.requestSource = CancelToken.source();
-    axios
-      .get("/screams", {
-        cancelToken: this.requestSource.token
-      })
-      .then(res => {
-        if (this.mounted) {
-          this.setState({
-            screams: res.data
-          });
-        } else console.log("Trying to call setState");
-      })
-      .catch(err => console.log(err));
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
-    // this.requestSource.cancel("Operation canceled by the user.");
+    this.props.getScreams();
   }
 
   render() {
-    let recentScreamsMarkup = this.state.screams ? (
-      this.state.screams.map(scream => {
+    console.log(this.props.data)
+    const { screams, loading } = this.props.data;
+
+    let recentScreamsMarkup = !loading ? (
+      screams.map(scream => {
         return <Scream scream={scream} key={scream.screamId} />;
       })
     ) : (
@@ -57,4 +37,13 @@ class home extends Component {
   }
 }
 
-export default home;
+home.propTypes = {
+  data: PropTypes.object.isRequired,
+  getScreams: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  data: state.data
+});
+
+export default connect(mapStateToProps, { getScreams })(home);

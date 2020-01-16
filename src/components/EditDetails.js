@@ -1,25 +1,28 @@
-import React, { Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-//Redux
+import MyButton from "../utils/MyButton";
+// Redux stuff
 import { connect } from "react-redux";
 import { editUserDetails } from "../redux/actions/userActions";
-//Mui
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
+// MUI Stuff
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+// Icons
 import EditIcon from "@material-ui/icons/Edit";
 
 const styles = theme => ({
-  ...theme
+  ...theme.spreadThis,
+  button: {
+    float: "right"
+  }
 });
 
-class EditDetails extends React.Component {
+class EditDetails extends Component {
   state = {
     bio: "",
     website: "",
@@ -33,46 +36,43 @@ class EditDetails extends React.Component {
       location: credentials.location ? credentials.location : ""
     });
   };
+  handleOpen = () => {
+    this.setState({ open: true });
+    this.mapUserDetailsToState(this.props.credentials);
+  };
+  handleClose = () => {
+    this.setState({ open: false });
+  };
   componentDidMount() {
     const { credentials } = this.props;
     this.mapUserDetailsToState(credentials);
   }
 
-  handleOpen = () => {
-    this.setState({ open: true });
-    this.mapUserDetailsToState(this.props.credentials);
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleChange = e => {
+  handleChange = event => {
     this.setState({
-      [e.target.name]: e.target.value
+      [event.target.name]: event.target.value
     });
   };
-
   handleSubmit = () => {
     const userDetails = {
       bio: this.state.bio,
       website: this.state.website,
       location: this.state.location
     };
-
     this.props.editUserDetails(userDetails);
     this.handleClose();
   };
-
   render() {
     const { classes } = this.props;
     return (
       <Fragment>
-        <Tooltip title="Edit details" placement="top">
-          <IconButton onClick={this.handleOpen} className={classes.button}>
-            <EditIcon color="primary" />
-          </IconButton>
-        </Tooltip>
+        <MyButton
+          tip="Edit details"
+          onClick={this.handleOpen}
+          btnClassName={classes.button}
+        >
+          <EditIcon color="primary" />
+        </MyButton>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -84,32 +84,32 @@ class EditDetails extends React.Component {
             <form>
               <TextField
                 name="bio"
-                type="text"
+                tpye="text"
                 label="Bio"
                 multiline
                 rows="3"
                 placeholder="A short bio about yourself"
-                className={classes.TextField}
+                className={classes.textField}
                 value={this.state.bio}
                 onChange={this.handleChange}
                 fullWidth
               />
               <TextField
                 name="website"
-                type="text"
+                tpye="text"
                 label="Website"
-                placeholder="Your personal/professional website"
-                className={classes.TextField}
+                placeholder="Your personal/professinal website"
+                className={classes.textField}
                 value={this.state.website}
                 onChange={this.handleChange}
                 fullWidth
               />
               <TextField
-                name="Location"
-                type="text"
+                name="location"
+                tpye="text"
                 label="Location"
                 placeholder="Where you live"
-                className={classes.TextField}
+                className={classes.textField}
                 value={this.state.location}
                 onChange={this.handleChange}
                 fullWidth
@@ -121,7 +121,7 @@ class EditDetails extends React.Component {
               Cancel
             </Button>
             <Button onClick={this.handleSubmit} color="primary">
-              Cancel
+              Save
             </Button>
           </DialogActions>
         </Dialog>
@@ -136,10 +136,8 @@ EditDetails.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  credentials: state.user.credential
+  credentials: state.user.credentials
 });
-
-const mapActionsToProps = {};
 
 export default connect(mapStateToProps, { editUserDetails })(
   withStyles(styles)(EditDetails)

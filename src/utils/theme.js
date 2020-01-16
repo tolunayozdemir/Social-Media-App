@@ -42,6 +42,7 @@ const theme = {
       position: "absolute"
     }
   }
+  
 };
 
 export default theme;
