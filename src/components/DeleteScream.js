@@ -16,9 +16,8 @@ import { deleteScream } from "../redux/actions/dataActions";
 const styles = {
   deleteButton: {
     position: "absolute",
-    top: "10%;",
+    top: "10%",
     right: "1rem"
-
   }
 };
 
@@ -62,7 +61,7 @@ class DeleteScream extends Component {
               Cancel
             </Button>
             <Button onClick={this.deleteScream} color="secondary">
-              Delete Screamm
+              Delete
             </Button>
           </DialogActions>
         </Dialog>

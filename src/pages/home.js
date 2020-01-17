@@ -14,7 +14,6 @@ class home extends Component {
   }
 
   render() {
-    console.log(this.props.data)
     const { screams, loading } = this.props.data;
 
     let recentScreamsMarkup = !loading ? (

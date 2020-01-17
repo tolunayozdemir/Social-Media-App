@@ -3,7 +3,13 @@ import {
   LOADING_DATA,
   LIKE_SCREAM,
   UNLIKE_SCREAM,
-  DELETE_SCREAM
+  DELETE_SCREAM,
+  LOADING_UI,
+  POST_SCREAM,
+  SET_ERRORS,
+  CLEAR_ERRORS,
+  SET_SCREAM,
+  STOP_LOADING_UI
 } from "../types";
 import axios from "axios";
 
@@ -23,6 +29,49 @@ export const getScreams = () => dispatch => {
         type: SET_SCREAMS,
         payload: null
       });
+    });
+};
+
+//Get Scream
+export const getScream = (screamId) => dispatch => {
+  dispatch({type: LOADING_UI});
+  axios.get(`/scream/${screamId}`)
+    .then(res => {
+      dispatch({
+        type: SET_SCREAM,
+        payload:res.data
+      })
+      dispatch({type: STOP_LOADING_UI})
+    })
+    .catch(err => console.log(err))
+}
+
+//Post scream
+export const postScream = newScream => dispatch => {
+  if (newScream.body.trim("") === "") {
+    let errors = {
+      body: "Must not be empty"
+    };
+    dispatch({ type: SET_ERRORS, payload: errors });
+    return;
+  }
+  dispatch({
+    type: LOADING_UI
+  });
+  axios
+    .post("/createScream", newScream)
+    .then(res => {
+      dispatch({
+        type: POST_SCREAM,
+        payload: res.data
+      });
+      dispatch({
+        type: CLEAR_ERRORS
+      });
+    })
+    .catch(err => {
+      dispatch({ type: SET_ERRORS, payload: err.response.data });
+      console.log(err);
     });
 };
 
@@ -62,4 +111,10 @@ export const deleteScream = screamId => dispatch => {
       });
     })
     .catch(err => console.log(err));
+};
+
+export const clearErrors = () => dispatch => {
+  dispatch({
+    type: CLEAR_ERRORS
+  });
 };
