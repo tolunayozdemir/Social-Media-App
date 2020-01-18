@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import StaticProfile from "../components/profile/StaticProfile";
 import Scream from "../components/scream/Scream";
+import ScreamSkeleton from "../utils/ScreamSkeleton";
+import ProfileSkeleton from "../utils/ProfileSkeleton";
+
 //MUO
 import Grid from "@material-ui/core/Grid";
 //Redux
@@ -36,7 +39,7 @@ class user extends Component {
     const { screamIdParam } = this.state;
 
     const userScreams = loading ? (
-      <p>Loading...</p>
+      <ScreamSkeleton />
     ) : screams === null ? (
       <p>No screams from this user</p>
     ) : screamIdParam ? (
@@ -60,7 +63,7 @@ class user extends Component {
           {this.state.profile ? (
             <StaticProfile profile={this.state.profile} />
           ) : (
-            <p>Loading..</p>
+            <ProfileSkeleton />
           )}
         </Grid>
       </Grid>

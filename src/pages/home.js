@@ -3,10 +3,10 @@ import Grid from "@material-ui/core/Grid";
 import Scream from "../components/scream/Scream";
 import Profile from "../components/profile/Profile";
 import PropTypes from "prop-types";
+import ScreamSkeleton from "../utils/ScreamSkeleton";
 //Redux
 import { connect } from "react-redux";
 import { getScreams } from "../redux/actions/dataActions";
-
 
 class home extends Component {
   componentDidMount() {
@@ -21,7 +21,7 @@ class home extends Component {
         return <Scream scream={scream} key={scream.screamId} />;
       })
     ) : (
-      <p>Loading...</p>
+      <ScreamSkeleton />
     );
     return (
       <Grid container spacing={2}>
