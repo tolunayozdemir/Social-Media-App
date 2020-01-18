@@ -12,10 +12,15 @@ import { getUserScreams } from "../redux/actions/dataActions";
 
 class user extends Component {
   state = {
-    profile: null
+    profile: null,
+    screamIdParam: null
   };
   componentDidMount() {
     const handle = this.props.match.params.handle;
+    const screamId = this.props.match.params.screamId;
+
+    if (screamId) this.setState({ screamIdParam: screamId });
+
     this.props.getUserScreams(handle);
     axios
       .get(`/user/${handle}`)
@@ -28,23 +33,35 @@ class user extends Component {
   }
   render() {
     const { screams, loading } = this.props.data;
+    const { screamIdParam } = this.state;
 
     const userScreams = loading ? (
       <p>Loading...</p>
     ) : screams === null ? (
       <p>No screams from this user</p>
+    ) : screamIdParam ? (
+      screams.map(scream => {
+        if (scream.screamId !== screamIdParam) {
+          return <Scream key={scream.screamId} scream={scream} openDialog/>;
+        } else {
+
+        }
+      })
     ) : (
       screams.map(scream => <Scream key={scream.screamId} scream={scream} />)
     );
 
-    console.log(this.state.profile);
     return (
       <Grid container spacing={2}>
         <Grid item sm={8} xs={12}>
           {userScreams}
         </Grid>
         <Grid item sm={4} xs={12}>
-          {this.state.profile ? <StaticProfile profile={this.state.profile} /> : <p>Loading..</p>}
+          {this.state.profile ? (
+            <StaticProfile profile={this.state.profile} />
+          ) : (
+            <p>Loading..</p>
+          )}
         </Grid>
       </Grid>
     );

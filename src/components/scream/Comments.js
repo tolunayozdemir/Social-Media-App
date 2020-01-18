@@ -27,7 +27,6 @@ class Comments extends Component {
       <Grid container>
         {comments.map((comment, index) => {
           const { body, createdAt, userImage, userHandle } = comment;
-          console.log(createdAt)
           return (
             <Fragment key={createdAt}>
               <Grid item sm={12}>

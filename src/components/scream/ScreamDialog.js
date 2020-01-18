@@ -12,7 +12,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import CommentForm from './CommentForm';
+import CommentForm from "./CommentForm";
 // Icons
 import CloseIcon from "@material-ui/icons/Close";
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
@@ -49,18 +49,37 @@ const styles = theme => ({
 
 class ScreamDialog extends Component {
   state = {
-    open: false
+    open: false,
+    oldPath: "",
+    newPath: "",
   };
 
+  componentDidMount() {
+    if (this.props.openDialog) {
+      this.handleOpen();
+    }
+  }
 
   handleOpen = () => {
+    let oldPath = window.location.pathname;
+
+    const { userHandle, screamId } = this.props;
+    const newPath = `/users/${userHandle}/scream/${screamId};`;
+
+    if(oldPath === newPath) oldPath = `/users/${userHandle}`
+
+    window.history.pushState(null, null, newPath);
+
     this.setState({
-      open: true
+      open: true,
+      oldPath,
+      newPath
     });
     this.props.getScream(this.props.screamId);
   };
 
   handleClose = () => {
+    window.history.pushState(null,null,this.state.oldPath);
     this.setState({
       open: false
     });
@@ -81,7 +100,6 @@ class ScreamDialog extends Component {
       },
       UI: { loading }
     } = this.props;
-
 
     const dialogMarkup = loading ? (
       <div className={classes.spinner}>
@@ -115,8 +133,8 @@ class ScreamDialog extends Component {
           <span>{commentCount} comments</span>
         </Grid>
         <hr className={classes.visibleSeparator} />
-        <CommentForm screamId= {screamId} />
-        <Comments comments= {comments} />
+        <CommentForm screamId={screamId} />
+        <Comments comments={comments} />
       </Grid>
     );
 
