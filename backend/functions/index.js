@@ -106,14 +106,16 @@ exports.deleteNotificationOnUnLike = functions
       });
   });
 
-exports.onUserImageChange = functions
+  exports.onUserImageChange = functions
   .region("europe-west1")
   .firestore.document("/users/{userId}")
   .onUpdate(change => {
     if (change.before.data().imageUrl !== change.after.data().imageUrl) {
-      let batch = db
+      const batch = db.batch();
+      return db
         .collection("screams")
-        .where("userHandle", "==", cange.before.data().handle.get())
+        .where("userHandle", "==", change.before.data().handle)
+        .get()
         .then(data => {
           data.forEach(doc => {
             const scream = db.doc(`/screams/${doc.id}`);
@@ -121,9 +123,7 @@ exports.onUserImageChange = functions
           });
           return batch.commit();
         });
-    } else {
-      return true;
-    }
+    } else return true;
   });
 
 exports.onScreamDelete = functions

@@ -1,32 +1,28 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import MyButton from "../utils/MyButton";
+import MyButton from "../../utils/MyButton";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import LikeButton from "./LikeButton";
-
+import Comments from "./Comments";
 //MUI
-
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import CommentForm from './CommentForm';
 // Icons
 import CloseIcon from "@material-ui/icons/Close";
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
 import ChatIcon from "@material-ui/icons/Chat";
 //Redux
 import { connect } from "react-redux";
-import { getScream } from "../redux/actions/dataActions";
+import { getScream } from "../../redux/actions/dataActions";
 
 const styles = theme => ({
   ...theme.spreadThis,
-  invisibleSeparator: {
-    border: "none",
-    margin: 4
-  },
   profileImage: {
     maxWidth: 200,
     height: 200,
@@ -70,7 +66,6 @@ class ScreamDialog extends Component {
   };
 
   render() {
-    console.log(this.props);
     const {
       classes,
       scream: {
@@ -80,10 +75,12 @@ class ScreamDialog extends Component {
         likeCount,
         commentCount,
         userImage,
-        userHandle
+        userHandle,
+        comments
       },
       UI: { loading }
     } = this.props;
+
 
     const dialogMarkup = loading ? (
       <div className={classes.spinner}>
@@ -116,6 +113,9 @@ class ScreamDialog extends Component {
           </MyButton>
           <span>{commentCount} comments</span>
         </Grid>
+        <hr className={classes.visibleSeparator} />
+        <CommentForm screamId= {screamId} />
+        <Comments comments= {comments} />
       </Grid>
     );
 
