@@ -35,16 +35,19 @@ export default function(state = initialState, action) {
       };
     case LIKE_SCREAM:
     case UNLIKE_SCREAM:
-      let index = state.screams.findIndex(
+      let newState = {
+        ...state,
+        scream: {
+          ...state.scream,
+          likeCount: action.payload.likeCount
+        }
+      };
+      let likedScream = state.screams.findIndex(
         scream => scream.screamId === action.payload.screamId
       );
-      if(state.scream.screamId === action.payload.screamId) {
-        state.scream = action.payload;
-      }
-      state.screams[index] = action.payload;
-      return {
-        ...state
-      };
+      state.screams[likedScream] = action.payload;
+
+      return newState;
     case DELETE_SCREAM:
       let deletedScream = state.screams.findIndex(
         scream => scream.screamId === action.payload
@@ -65,7 +68,7 @@ export default function(state = initialState, action) {
           ...state.scream,
           comments: [action.payload, ...state.scream.comments]
         }
-      }
+      };
     default:
       return state;
   }
