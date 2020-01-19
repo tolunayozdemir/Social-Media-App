@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import PropTypes from "prop-types";
-import MyButton from "../../utils/MyButton";
 //MUI
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -46,7 +45,7 @@ class Notifications extends Component {
   render() {
     const notifications = this.props.notifications;
     const anchorEl = this.state.anchorEl;
-    const time = dayjs.extend(relativeTime);
+    dayjs.extend(relativeTime);
 
     let notIcon;
     if (notifications && notifications.length > 0) {

@@ -45,9 +45,9 @@ class user extends Component {
     ) : screamIdParam ? (
       screams.map(scream => {
         if (scream.screamId !== screamIdParam) {
-          return <Scream key={scream.screamId} scream={scream} openDialog/>;
+          return <Scream key={scream.screamId} scream={scream} openDialog />;
         } else {
-
+          return null
         }
       })
     ) : (

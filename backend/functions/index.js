@@ -3,6 +3,9 @@ const app = require("express")();
 const { db } = require("./util/admin");
 const FBAuth = require("./util/fbAuth");
 
+const cors = require("cors");
+app.use(cors());
+
 const {
   getAllScreams,
   postScream,
@@ -106,7 +109,7 @@ exports.deleteNotificationOnUnLike = functions
       });
   });
 
-  exports.onUserImageChange = functions
+exports.onUserImageChange = functions
   .region("europe-west1")
   .firestore.document("/users/{userId}")
   .onUpdate(change => {
